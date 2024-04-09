@@ -13,21 +13,21 @@
 #include "zos_video.h"
 
 #define WIDTH 80
-#define HEIGHT 40
+#define HEIGHT 39
 
 #define for_x for (int x = 0; x < WIDTH; x++)
 #define for_y for (int y = 0; y < HEIGHT; y++)
 #define for_xy for_x for_y
 
 
-
 void show(void *u) {
+    ioctl(DEV_STDOUT, CMD_CLEAR_SCREEN, NULL);
+
 	bool (*univ)[WIDTH] = u;
 	for_y {
 		for_x printf(univ[y][x] ? "@" : " ");
 		printf("\n");
 	}
-	zos_video_cmd_t CMD_CLEAR_SCREEN;
 }
 
 
@@ -53,11 +53,11 @@ void evolve(void *u)
 }
 
 
-void game() {
+void game(void) {
 
 	bool univ[HEIGHT][WIDTH];
 
-	for_xy univ[y][x] = rand() < RAND_MAX / 5 ? 1 : 0;
+	for_xy univ[y][x] = rand() < RAND_MAX / 2 ? 1 : 0;
 
 	while (1) {
 		show(univ);
@@ -65,10 +65,11 @@ void game() {
 	}
 }
 
-int main(int argc, char** argv) {
+int main(void) {
 
 	game();
 
 	return 0;
+
 }
 
